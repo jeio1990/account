@@ -1,0 +1,46 @@
+server:
+  port: ${ACCOUNT_SERVICE_PORT:9093}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka/
+  healthcheck:
+        enabled: true
+  instance:
+      leaseRenewalIntervalInSeconds: 1
+      leaseExpirationDurationInSeconds: 2
+  registry-fetch-interval-seconds: 1
+
+
+spring:
+  application:
+    name: account-service
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          semaphore:
+            maxConcurrentRequests: 10
+          thread:
+            timeoutInMilliseconds: 3000
+      circuitBreaker:
+        requestVolumeThreshold: 3
+        sleepWindowInMilliseconds: 10000
+#    findAll:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 2000
+#        timeout:
+#          enabled: true
+#      circuitBreaker:
+#        requestVolumeThreshold: 3
+#        sleepWindowInMilliseconds: 10000
+  #threadpool:
+    #default:
+      #coreSize: 1
+      #queueSizeRejectionThreshold: 3
